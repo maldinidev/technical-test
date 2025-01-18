@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LoadingIndicator.vue matches the snapshot when loading is false 1`] = `"<!--v-if-->"`;
+
+exports[`LoadingIndicator.vue matches the snapshot when loading is true 1`] = `"<div role="status" aria-live="polite" class="text-center py-4 text-gray-500"> Cargando imágenes... </div>"`;
