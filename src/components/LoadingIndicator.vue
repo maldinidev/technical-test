@@ -5,11 +5,12 @@
 </template>
 
 <script setup>
-// Define the props for the component
+import { defineProps } from 'vue';
+
 defineProps({
   loading: {
-    type: Boolean, // Indicates whether the loading state is active
-    required: true, // This prop is mandatory for the component to render correctly
+    type: Boolean,
+    required: true,
   },
 });
 </script>

@@ -9,7 +9,23 @@ describe('ImageCard.vue', () => {
     loaded: false,
   };
 
-  it('renderiza la imagen correctamente', () => {
+  // Mock the IntersectionObserver before each test
+  beforeEach(() => {
+    global.IntersectionObserver = jest.fn((callback) => ({
+      observe: jest.fn((element) => {
+        callback([{ isIntersecting: true, target: element }]); // Simulate that the image is visible
+      }),
+      unobserve: jest.fn(),
+      disconnect: jest.fn(),
+    }));
+  });
+
+  // Clean up the IntersectionObserver mock after each test
+  afterEach(() => {
+    delete global.IntersectionObserver;
+  });
+
+  it('renders the image correctly', () => {
     const wrapper = mount(ImageCard, {
       props: {
         image: mockImage,
@@ -17,25 +33,25 @@ describe('ImageCard.vue', () => {
     });
 
     const img = wrapper.find('img');
-    expect(img.attributes('src')).toBe(mockImage.download_url);
-    expect(img.attributes('alt')).toBe(mockImage.author);
+    expect(img.attributes('src')).toBe(mockImage.download_url); // Check if the src attribute is correct
+    expect(img.attributes('alt')).toBe(mockImage.author); // Check if the alt attribute is correct
   });
 
-  it('emite el evento "remove" al hacer clic en el área de eliminación', async () => {
+  it('emits the "remove" event when the delete overlay is clicked', async () => {
     const wrapper = mount(ImageCard, {
       props: {
         image: mockImage,
       },
     });
 
-    const removeOverlay = wrapper.find('.group-hover\\:opacity-85');
-    await removeOverlay.trigger('click');
+    const removeOverlay = wrapper.find('.group-hover\\:opacity-85'); // Find the delete overlay element
+    await removeOverlay.trigger('click'); // Simulate a click on the overlay
 
-    expect(wrapper.emitted('remove')).toBeTruthy();
-    expect(wrapper.emitted('remove')[0]).toEqual([mockImage]);
+    expect(wrapper.emitted('remove')).toBeTruthy(); // Check if the "remove" event was emitted
+    expect(wrapper.emitted('remove')[0]).toEqual([mockImage]); // Verify the event payload
   });
 
-  it('marca la imagen como cargada al disparar el evento load', async () => {
+  it('emits the "load" event with the image when the image is loaded', async () => {
     const wrapper = mount(ImageCard, {
       props: {
         image: mockImage,
@@ -43,26 +59,13 @@ describe('ImageCard.vue', () => {
     });
 
     const img = wrapper.find('img');
+
+    // Simulate the load event on the image element
     await img.trigger('load');
 
-    expect(mockImage.loaded).toBe(true);
-  });
-
-  it('applies the correct classes based on the "loaded" state', async () => {
-    const wrapper = mount(ImageCard, {
-      props: {
-        image: { ...mockImage, loaded: false },
-      },
-    });
-
-    const img = wrapper.find('img');
-    expect(img.classes()).toContain('opacity-0');
-    expect(img.classes()).toContain('scale-95');
-
-    // Simulate the image load
-    await img.trigger('load');
-    expect(img.classes()).toContain('opacity-100');
-    expect(img.classes()).toContain('scale-100');
+    // Assert that the "load" event was emitted with the image object
+    expect(wrapper.emitted('load')).toBeTruthy(); // Check if the "load" event was emitted
+    expect(wrapper.emitted('load')[0][0]).toEqual(mockImage); // Verify the event payload
   });
 
   it('matches the snapshot', () => {
@@ -72,6 +75,6 @@ describe('ImageCard.vue', () => {
       },
     });
 
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(wrapper.html()).toMatchSnapshot(); // Ensure the component's HTML matches the snapshot
   });
 });

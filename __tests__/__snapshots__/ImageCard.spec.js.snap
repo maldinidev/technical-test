@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ImageCard.vue matches the snapshot 1`] = `
-"<div class="relative group"><img src="https://picsum.photos/id/1/200/300" alt="Author 1" loading="lazy" class="w-full h-48 object-cover shadow transition duration-700 ease-in-out transform opacity-100 scale-100">
+"<div class="relative group">
+  <!-- Placeholder for the loading state -->
+  <div class="absolute inset-0 bg-gray-200 animate-pulse"></div><!-- Lazy-loaded image --><img alt="Author 1" class="w-full h-48 object-cover shadow transition duration-700 ease-in-out transform opacity-0 scale-95" src="https://picsum.photos/id/1/200/300"><!-- Remove button -->
   <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-85 duration-700 ease-in-out cursor-pointer"><span class="text-white font-bold">Eliminar</span></div>
 </div>"
 `;
